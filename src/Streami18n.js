@@ -124,9 +124,10 @@ const en_locale = {
   weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split(
     '_',
   ),
-  months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split(
-    '_',
-  ),
+  months:
+    'January_February_March_April_May_June_July_August_September_October_November_December'.split(
+      '_',
+    ),
 };
 
 /**
@@ -393,6 +394,7 @@ export class Streami18n {
       debug: finalOptions.debug,
       lng: this.currentLanguage,
       interpolation: { escapeValue: false },
+      compatibilityJSON: 'v3',
 
       parseMissingKeyHandler: (key) => {
         this.logger(`Streami18n: Missing translation for key: ${key}`);
