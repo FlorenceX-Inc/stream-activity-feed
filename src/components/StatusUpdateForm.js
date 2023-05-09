@@ -29,7 +29,8 @@ const ImageState = Object.freeze({
   UPLOAD_FAILED: Symbol('upload_failed'),
 });
 
-const urlRegex = /(?:\s|^)((?:https?:\/\/)?(?:[a-z0-9-]+(?:\.[a-z0-9-]+)+)(?::[0-9]+)?(?:\/(?:[^\s]+)?)?)/g;
+const urlRegex =
+  /(?:\s|^)((?:https?:\/\/)?(?:[a-z0-9-]+(?:\.[a-z0-9-]+)+)(?::[0-9]+)?(?:\/(?:[^\s]+)?)?)/g;
 class StatusUpdateForm extends React.Component {
   static defaultProps = {
     feedGroup: 'user',
@@ -193,15 +194,18 @@ class StatusUpdateFormInner extends React.Component {
 
     let response;
     let contentType;
+    let type;
     if (Platform.OS === 'android') {
       const filename = result.uri.replace(/^(file:\/\/|content:\/\/)/, '');
       contentType = mime.lookup(filename) || 'application/octet-stream';
+      type = contentType;
     }
     try {
       response = await this.props.client.images.upload(
         result.uri,
         null,
         contentType,
+        type,
       );
     } catch (e) {
       console.warn(e);
@@ -279,7 +283,8 @@ class StatusUpdateFormInner extends React.Component {
     if (this.state.ogScraping) {
       return;
     }
-    const urls = text.match(urlRegex);
+    let urls = text.match(urlRegex);
+    urls = urls?.map((url) => url.trim()); // bug? without this, entire app freezes.
 
     if (!urls) {
       this.setState({
